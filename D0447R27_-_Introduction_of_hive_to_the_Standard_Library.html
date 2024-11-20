@@ -986,7 +986,7 @@ every element block transition, 2 reads of the skipfield are necessary instead o
 		UB mentioned.</p>
 		<p><i>Note 1</i>: in order to check whether a given element is erased when
 		an implementation is using the <a href="https://archive.org/details/matt_bentley_-_the_low_complexity_jump-counting_pattern">low-complexity
-		jump-counting pattern</a>, the additional operations specified under
+		jump-counting pattern</a>, the additional operations specifiedÂ under
 		"Parallel processing" in that paper must be followed.</p>
 		<p><i>Note 2</i>: get_iterator compares pointers against the start and end
 		memory locations of the active blocks in
@@ -1310,24 +1310,22 @@ namespace std {
 
 <h4>Overview [hive.overview]</h4>
 <ol>
-	 <li>A hive is a type of sequence container that supports constant-time insertion and erasure operations. Storage management is automatically handled, with elements organized into multiple blocks, referred to as <i>element blocks</i>. Insertion position is determined by the container.<br>
-[Note: When erasures have occurred the container may re-use existing erased element memory locations during insertion. -end note]
-	<li>Element blocks which are traversed when iterating over the sequence
-		are referred to as <i>active blocks</i>, those which are not are referred
-		to as <i>reserved blocks</i>. Active blocks which become empty of sequence
-		elements [Example: via use of <code>erase</code> or <code>clear</code> -
-		end example] are either deallocated or become reserved blocks. Reserved
-		blocks can be allocated by the user [Example: by <code>reserve</code> - end
-		example] for future use during insertions, at which point they become
-		active blocks.</li>
-	<li>Erasures use unspecified techniques to identify the memory locations of erased elements, as opposed to relocating subsequent elements during erasure. These locations are subsequently skipped
-		during iteration. The same, or different unspecified techniques may be utilized
-		to reuse those locations later, during insertions. All of these techniques have constant
-		time complexity.</li>
-	<li>Active block capacities have an implementation-defined growth factor
-		(which need not be integral), for example a new active block's capacity
-		could be equal to the summed capacities of the pre-existing active
-	blocks.</li>
+	 <li>A hive is a type of sequence container that provides constant-time insertion and erasure operations. 
+	  Storage management is automatically handled, with elements organized into multiple blocks, referred to as <i>element blocks</i>. 
+	  Insertion position is determined by the container and may re-use existing erased locations.<br>
+	<li>Element blocks which contain an element
+		are referred to as <i>active blocks</i>, those which do not are referred
+		to as <i>reserved blocks</i>. Active blocks can become empty 
+		via use of <code>erase</code> or <code>clear</code> and are either
+		deallocated or become reserved blocks.  Reserved blocks can become
+		active blocks during insertions of elements. A user can create additional reserved
+		blocks calling <code>reserve</code>. </li>
+	<li>    Iteration of a hive returns only non-erased elements from active blocks. 
+	        A hive uses unspecified techniques of constant time complexity to identify the memory locations of erased elements.</li>
+	<li>	In contrast to some other containers, erasure of elements causes no element relocations.</li>
+	<li>Active block capacities have an implementation-defined growth factor, which need not be integral.
+		[Example a new active block's capacity
+		could be equal to the summed capacities of the pre-existing active blocks. -end example]</li>
 	<li>Limits can be placed on both the minimum and maximum element capacities
 		of element blocks, both by users and implementations.
 		<p style="text-indent: -25pt;">(5.1) &mdash; The minimum limit shall be no
